@@ -48,3 +48,31 @@ chmod +x /bin/do-init
 
 # Enable do-init service
 rc-update add do-init default
+
+# Install Oh My Zsh for root user
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Set zsh as default shell for root
+chsh -s /bin/zsh root
+
+# Configure Oh My Zsh
+cat > /root/.zshrc <<-EOF
+# Path to your oh-my-zsh installation.
+export ZSH="/root/.oh-my-zsh"
+
+# Set name of the theme to load
+ZSH_THEME="robbyrussell"
+
+# Which plugins would you like to load?
+plugins=(git docker docker-compose)
+
+source \$ZSH/oh-my-zsh.sh
+
+# User configuration
+export PATH=\$PATH:/usr/local/bin
+
+# Aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+EOF
