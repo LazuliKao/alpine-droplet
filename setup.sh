@@ -3,6 +3,24 @@
 # Enable openssh server
 rc-update add sshd default
 
+# Copy reserved-ipv6.sh to /usr/local/bin and make it executable
+cp reserved-ipv6.sh /usr/local/bin/reserved-ipv6.sh
+chmod +x /usr/local/bin/reserved-ipv6.sh
+
+# Create OpenRC service to run reserved-ipv6.sh at every boot
+cat > /etc/init.d/reserved-ipv6 <<-EOF
+#!/sbin/openrc-run
+command="/usr/local/bin/reserved-ipv6.sh"
+command_background="no"
+depend() {
+    need net.eth0
+}
+EOF
+
+# Make the service executable and enable it
+chmod +x /etc/init.d/reserved-ipv6
+rc-update add reserved-ipv6 default
+
 # Configure networking
 cat > /etc/network/interfaces <<-EOF
 iface lo inet loopback
@@ -27,6 +45,18 @@ wget -T 5 http://169.254.169.254/metadata/v1/hostname    -q -O /etc/hostname
 wget -T 5 http://169.254.169.254/metadata/v1/public-keys -q -O /root/.ssh/authorized_keys
 hostname -F /etc/hostname
 chmod 600 /root/.ssh/authorized_keys
+
+apk add --no-cache docker
+rc-update add docker boot
+rc-service docker start
+
+# Install Oh My Zsh for root user
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Set zsh as default shell for root
+# chsh -s /bin/zsh root
+sed -i 's|/bin/ash|/bin/zsh|' /etc/passwd
+
 rc-update del do-init default
 exit 0
 EOF
@@ -48,12 +78,6 @@ chmod +x /bin/do-init
 
 # Enable do-init service
 rc-update add do-init default
-
-# Install Oh My Zsh for root user
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-# Set zsh as default shell for root
-chsh -s /bin/zsh root
 
 # Configure Oh My Zsh
 cat > /root/.zshrc <<-EOF

@@ -10,5 +10,5 @@ then
     echo $F > version
 fi
 
-./alpine-make-vm-image/alpine-make-vm-image --packages "openssh e2fsprogs-extra docker-compose htop screen zsh git curl" --script-chroot --image-format qcow2 $F.qcow2 -- ./setup.sh
+./alpine-make-vm-image/alpine-make-vm-image --packages "openssh e2fsprogs-extra docker-compose htop screen zsh git curl jq iproute2" --script-chroot --image-format qcow2 $F.qcow2 -- ./setup.sh
 bzip2 -z $F.qcow2
