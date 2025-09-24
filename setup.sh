@@ -51,7 +51,7 @@ rc-update add docker boot
 rc-service docker start
 
 # Install Oh My Zsh for root user
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+sh -c "$$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Set zsh as default shell for root
 # chsh -s /bin/zsh root
