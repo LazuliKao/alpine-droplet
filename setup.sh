@@ -55,7 +55,7 @@ sh -c "\$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install
 
 # Set zsh as default shell for root
 # chsh -s /bin/zsh root
-sed -i 's|/bin/ash|/bin/zsh|' /etc/passwd
+sed -i 's|/bin/sh|/bin/zsh|' /etc/passwd
 
 rc-update del do-init default
 exit 0
