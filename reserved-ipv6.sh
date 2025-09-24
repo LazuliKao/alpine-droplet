@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/sh
 
 IFACE_ETH0="eth0"
 IFACE_LO="lo"
